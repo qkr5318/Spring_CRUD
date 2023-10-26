@@ -53,8 +53,17 @@
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 	  
 	<script type="text/javascript">
+	
+		// jQuery의 $(document).ready(function 바깥쪽에 작성한다.)
+		// 이렇게 하는 이유는 나중에<a> 태그에서 직접 showImage()를 호출할 수 있는 방식으로 작성하기 위해서다.
+		function showImage(fileCallPath){
+		
+				alert(fileCallPath);
+				
+		}
 		
 		$(document).ready(function () {
+			
 			
 			
 			
@@ -87,12 +96,22 @@
 				$(uploadResultArr).each(function (i, obj) {
 					
 					if (!obj.image) {
-						str += "<li><img src='/resources/img/attach1.png'>" + obj.fileName + "</li>";
-					}else{
-					//	str += "<li>" + obj.fileName + "</li>";
+						// 파일이 이미지가아닐때
+						var fileCallPath = encodeURIComponent(obj.uploadPath +"/"+ obj.uuid+"_"+obj.fileName);
+						
+						str += "<li><a href='/download?fileName="+fileCallPath+"'>"
+								+"<img src='/resources/img/attach1.png'>"+obj.fileName+"</li>";
 					
-					var fileCallPath = encodeURIComponent(obj.uploadPath + "/s_"+ obj.uuid+"_"+obj.fileName);
-					str += "<li><img src='/display?fileName="+fileCallPath+"'></li>";
+					}else{
+						ㅔ//	str += "<li>" + obj.fileName + "</li>";
+						// 파일이 이미지일때
+						
+						var fileCallPath = encodeURIComponent(obj.uploadPath + "/s_"+ obj.uuid+"_"+obj.fileName);
+						
+						var originPath = obj.uploadPath + "\\"+ obj.uuid + "_" + obj.fileName;
+						
+					 	originPath = originPath.replace(new RegExp(/\\/g), "/")
+						str += "<li><img src='/display?fileName="+fileCallPath+"'></li>";
 					}
 					
 				});
