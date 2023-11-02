@@ -1,0 +1,95 @@
+DTO와 VO의 차이
+
+DTO(Data Transfer Object)란
+순수하게 데이터를 담아 계층 간으로 전달하는 객체이다.
+
+- 로직을 갖고 있지 않은 순수한 데이터 객체이며 
+메서드로는 getter/setter만을 갖는다.
+여기서 getter/setter 이외에 다른 로직이 필요 없는 이유는
+만약 DTO가 데이터 전달 만을 위한 객체라고 한다면 완전히 데이터'전달' 용도로만 사용하기 때문에
+getter/setter 로직만이 필요하지 다른 로직이 필요하지 않은 것이다.
+
+보내는 쪽에서는 setter를 이용하여 값을 담아 전달하고,
+받는 쪽에서는 getter를 이용하여 값을 꺼내 쓰게 된다.
+이때 setter의 경우 변조 가능성이 있기 때문에 아래와 같이 생성자로 값을 넣어주도록 하게 하면
+전달하는 과정에서 변조가 불가능하다.
+
+
+VO(Value Object)란
+VO는 값 그 자체를 나타내는 객체이다.
+DTO와 반대로 로직을 포함할 수 있으며, VO의 경우 특정 값 자체를 표현하기 때문에
+불변성의 보장을 위해 생성자를 사용하여야 한다.
+
+VO는 서로 다른 이름을 갖는 VO 인스턴스라도 모든 속성 값이 같다면 두 인스턴스는 같은 객체인 것이 
+핵심이다.
+
+예를 들어 모두 똑같은 자동차가 색깔만 다르다고 하더라도 이를 별개의 객체로 보는 것이 아니라
+하나의 객체(자동차)로 보는 것과 같다.
+
+//생성자를 이용한 불변 객체
+public class CarVO {
+
+    private final String color;
+
+    public CarVO(String color) {
+        this.color = color;
+    }
+    
+}
+자동차의 색깔의 값을 가지고 있는 VO를 하나 만들어서 객체 두개를 아래와 같이 비교 테스트로 돌려보았다.
+
+class CarVOTest {
+
+    @Test
+    void CarVOEqualTest() {
+        final String color = "red";
+
+        CarVO car1 = new CarVO(color);
+        CarVO car2 = new CarVO(color);
+
+        assertThat(car1).isEqualTo(car2);
+        assertThat(car1).hasSameHashCodeAs(car2);
+
+    }
+
+}
+
+당연하게도 객체의 주소값을 비교하기 때문에 값이 같은 것과는 상관없이 테스트에서 에러가 난다.
+이러한 문제가 있기 때문에 값만을 비교하기 위해서 equals()와 hashCode()를 오버 라이딩(재정의)
+해주어야 한다.
+
+public class CarVO {
+
+    private final String color;
+
+    public CarVO(String color) {
+        this.color = color;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CarVO carVO = (CarVO) o;
+        return Objects.equals(color, carVO.color);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(color);
+    }
+
+즉 VO는 값 그 자체를 나타내기 때문에 setter 같은 성격의 변조 가능성이 있는 메서드가 존재하면 안되며, 두 객체의 '필드 값이 같다면' 모두 같은 각체로 만드는 것이 핵심이다
+
+여러 의견들을 찾아보며 느낀 것이지만 같이 혼용해서 사용하는 경우도 있고, 엄격하게 나눠 사용하는 경우도 있고 한 것 같다. 즉 합의하에 사용하면 되는 것이지 무엇을 어떻게 사용하는 것이 정답이다!라고 딱 잘라 말하기는 어렵다. 하지만 이름이 나뉘어 있고 해당 객체들이 하는 역할을 구분도 하니 대체적으로는 구분해서 사용하는 것이 좋지 않을까 하는 것이 개인적이 생각이다.
+
+ 
+
+핵심정리
+DTO는 계층간의 데이터를 전송하기 위한 객체로써, getter/setter를 사용하여 보내는 사람은 setter를 사용하여 값을 담고, 받는 사람은 getter를 사용하여 값을 꺼내 쓴다. 이때 값의 변조를 막고 싶다면 생성자로 불변 객체로 만들어 버리면 된다. 또한 DTO의 특성상 데이터 전달만은 목적으로 사용하기 때문에 getter/setter를 제외한 다른 로직이 필요가 없다.
+
+ 
+
+VO의 경우 값 그 자체를 나타내는 객체로써, 핵심은 필드 값이 같다면 두 객체를 같은 객체로 본다는 것이다. 이때 당연하게도 주소값을 비교하는 경우의 문제점을 위해서 hashcode()와 equals()를 재정의하여 필드 값이 같다면 같은 객체로 인식될 수 있도록 해주어야 한다.
+
+ 

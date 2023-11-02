@@ -1,0 +1,42 @@
+1. J2EE (Java 2 Enterprise Edition)
+
+■ J2EE란?
+
+J2EE는 자바 기술로 기업환경의 어플리케이션을 만드는데 필요한 스펙들을 모아둔 스펙 집합입니다.
+J2EE를 만든 것은 Sun Microsystems이고 SUN에서 J2EE 스펙을 시범적으로 구현해두기는 하지만,
+IBM, BEA, Oracle, HP, Iona등 여러 벤더들도 그 스펙을 구현할 수 있으며 J2EE 호환성을 검증하
+는 기구의 검증을 통과하기만 하면 J2EE 호환 제품으로 시장에 출시할 수 있습니다.
+그리고 이런 벤더들은 J2EE 스펙을 개선하는 과정에도 활발히 참여하기 때문에, J2EE는 사실상
+SUN의 독점적인 기술이라기 보다는 Java진영으로 불리는 여러 Vendor들과 개발자들이 같이 만들어
+가고 공유하는 기술로 보는 것이 더 정확할 것입니다.
+
+
+■ 기본 특징
+
+
+-->  언어는 Java, 플랫폼은 자유
+J2EE의 가장 큰 특징이라면, Java로 구현된 기술이기 때문에 Java가 갖는 기본적인 특징인 "플
+랫폼 독립"성을 갖추고 있다는 것입니다. Java언어는 JVM(Java Virtual Machine)이라는 가상 머
+신을 통해 각 OS에 맞게 바이트 코드로 변환되어 실행되기 때문에 JVM이 탑재된 플랫폼이라면
+어떤 플랫폼이라도 동일한 자바 소스 코드를 실행시킬 수 있습니다.
+
+
+--> 구성 요소
+J2EE는 매우 방대한 범위를 다루는 스펙 집합이므로 대표적인 것들을 간단히 소개하도록 하겠
+습니다.
+
+Servlet : 클라이언트가 보내는 HTTP 요청을 처리하는 서버측 자바 프로그램이며, Servlet 엔진이 있어야 합니다.
+
+JSP(Java Server Pages): HTML이나 Java 코드를 써서 사용자에게 정보를 보여 줍니다. JSP가 처음 실행될 때 Servlet 엔진이 이것을 Servlet으로 컴파일시켜서 내부적으로는 Servlet으로 동작합니다.
+
+EJB(Enterprise Java Beans) : Java에서 제공하는 분산 컴포넌트 기술로 비즈니스 로직이나 데이터, 메시지를 처리할 수 있습니다.
+
+Remote Method Invocation(RMI): 프록시를 써서 원격에 있는 Java 객체의 메소드를 실행시키기 위한기술입니다.
+
+Java Naming DirectoryInterface (JNDI): 자바 기술로 만들어진 객체에 이름을 붙여 찾을 수 있도록 단일한인터페이스를 제공합니다.
+
+Java Database Connector(JDBC): 여러 종류의 데이터베이스 시스템에 접근하는 단일한 인터페이스를 제공합니다. 각각의 데이터베이스에 맞는 JDBC 드라이버가 있어야 합니다.
+
+Java Connector Architecture(JCA): 이기종 플랫폼을 통합할 수 있도록 플랫폼 독립적인 인터페이스를 제공합니다.
+
+Java Message Service (JMS): 여러 가지 메시징 시스템에 대한 플랫폼 독립적인 인터페이스를 제공합니다.

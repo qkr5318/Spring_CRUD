@@ -1,0 +1,231 @@
+래퍼런스 = https://ittrue.tistory.com/227
+
+
+프레임워크(Framework)/Spring
+
+
+의존성 주입(DI : Dependency Injection) 방법
+의존성 주입에는 4가지 방법이 존재한다.
+
+생성자 주입
+수정자 주입 (setter 주입)
+필드 주입
+일반 메서드 주입
+ 
+
+스프링 공식 문서에서는 생성자 주입을 권장하고 있다.
+
+의존 관계가 변경되지 않을 경우 : 생성자 주입
+
+의존 관계가 선택적이거나 변경 가능한 경우 : 수정자 주입(setter 주입)
+
+ 
+
+생성자 주입
+생성자 주입은 생성자를 통해서 의존 관계를 주입받는 방법이다.
+
+생성자에 @Autowired를 하면 스프링 컨테이너에 @Component로 등록된 빈에서 생성자에 필요한 빈들을 주입한다.
+
+ 
+
+생성자 주입의 특징
+
+생성자 호출 시점에 1번만 호출되는 것을 보장한다.
+불변과 필수 의존 관계에 사용한다.
+생성자가 1개만 존재하는 경우 @Autowired를 생략해도 자동 주입된다.
+NPE(NullPointerException)를 방지할 수 있다.
+주입받을 필드를 final로 선언 가능하다.
+@Component
+public class CoffeeService {
+    private final MemberRepository memberRepository;
+    private final CoffeeRepository coffeeRepository;
+
+    @Autowired
+    public CoffeeServiceImpl(MemberRepository memberRepository, CoffeeRepository coffeeRepository) {
+        this.memberRepository = memberRepository;
+        this.coffeeRepository = coffeeRepository;
+    }
+}
+ 
+
+수정자 주입(setter 주입)
+setter라 불리는 필드의 값을 변경하는 수정자 메서드를 통해서 의존 관계를 주입하는 방법이다.
+
+@Component를 통해 실행하는 클래스를 스프링 빈으로 등록하고 의존관계를 주입하게 된다.
+
+@Autowired가 있는 수정자들을 자동으로 의존관계를 주입한다.
+
+ 
+
+수정자 주입(setter 주입)의 특징
+
+선택과 변경 가능성이 있는 의존 관계에 사용한다.
+자바 빈 프로퍼티 규약의 수정자 메서드 방식을 사용하는 방법이다.
+set필드명 메서드를 생성하여 의존 관계를 주입한다.
+@Autowired를 입력하지 않으면 실행이 되지 않는다.
+@Component
+public class CoffeeService {
+    private final MemberRepository memberRepository;
+    private final CoffeeRepository coffeeRepository;
+
+    @Autowired
+    public void setMemberRepository(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
+
+    @Autowired
+    public void setCoffeeRepository(CoffeeRepository coffeeRepository) {
+        this.coffeeRepository = coffeeRepository;
+    }
+}
+ 
+
+필드 주입
+필드에 @Autowired를 붙여서 바로 주입하는 방법이다.
+
+ 
+
+필드 주입의 특징
+
+코드가 간결해진다.
+단, 외부에서 변경이 불가능하여 테스트하기 어려운 단점이 있다.
+DI 프레임워크가 없으면 아무것도 할 수 없다.
+애플리케이션의 실제 코드와 상관없는 특정 테스트를 하고 싶을 때 사용한다.
+정상적으로 작동되게 하려면 결국 setter가 필요하다.
+만약, 의존관계를 필수적으로 넣지 않으려면 @Autowired(required=false) 옵션 처리를 통해 필수가 아님을 명시할 수 있다.
+@Component
+public class CoffeeService {
+    @Autowired
+    private final MemberRepository memberRepository;
+    @Autowired
+    private final CoffeeRepository coffeeRepository;
+}
+필드 주입을 사용하지 않는 이유
+
+필드 주입을 하게 되면 DI 컨테이너 안에서만 작동하게 된다. 따라서 순수 자바 코드로 테스트하기 어렵다.
+
+또한, final 키워드를 통해 불변 속성이라고 볼 수도 없고, setter로 가변 속성이라고 볼 수도 없는 애매한 상황이 발생한다.
+
+ 
+
+일반 메서드 주입
+일반 메서드를 통해서 의존관계를 주입하는 방법이다.
+
+@Autowired 어노테이션은 모든 메서드에서 사용할 수 있기 때문에 일반 메서드 주입이 가능하다.
+
+ 
+
+일반 메서드 주입의 특징
+
+한 번에 여러 필드를 주입받을 수 있다.
+일반적으로 사용하지는 않는다.
+@Component
+public class CoffeeService {
+    private final MemberRepository memberRepository;
+    private final CoffeeRepository coffeeRepository;
+
+    @Autowired
+    public void method(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
+}
+일반 메서드 주입을 사용하지 않는 이유
+
+필드 주입과 비슷하게 애매한 상황이 발생할 수 있다.
+
+여러 필드를 받을 것이라면 차라리 생성자 주입을 사용하는 것이 좋다.
+
+ 
+
+옵션 처리
+만약, 의존 관계를 주입할 스프링 빈이 없을 때 동작해야 하는 경우가 있다.
+
+@Autowired만 사용하는 경우 required 옵션 기본값인 true가 사용되어 자동 주입 대상이 없으면 오류가 발생하는 경우가 있을 수 있다.
+스프링 빈을 옵셔널하게 해 둔 상태에서 등록이 되지 않고, 기본 로직으로 동작하게 하는 경우
+ 
+
+ 
+
+자동 주입 대상 옵션 처리 방법
+
+@Autowired(required=false) : 자동 주입할 대상이 없으면 수정자 메서드 자체가 호출되지 않게 된다.
+org.springframework.lang.@Nullable : 자동 주입할 대상이 없으면 null이 입력된다.
+Optional<> : 자동 주입할 대상이 없으면 Optional.empty가 입력된다.
+ 
+
+스프링 빈이 아닌 Member라는 클래스를 의존성 주입하는 경우의 예제이다.
+
+@Autowired(required = false) // 호출 안됨
+public void setNoBean1(Member noBean1) {
+    System.out.println("noBean1 = " + noBean1);
+}
+
+@Autowired
+public void setNoBean2(@Nullable Member noBean2) {
+    System.out.println("noBean2 = " + noBean2);
+}
+
+@Autowired
+public void setNoBean3(Optional<Member> noBean3) {
+    System.out.println("noBean3 = " + noBean3);
+}
+// 출력
+noBean2 = null
+noBean3 = Optional.empty
+noBean1의 경우 자동 주입할 대상이 없기 때문에 호출이 되지 않으며, noBean2는 null, noBean3는 빈 Optional이 반환된다.
+
+ 
+
+생성자 주입을 사용해야 하는 이유
+과거에는 수정자, 필드 주입을 많이 사용했지만, 최근에는 대부분 생성자 주입 사용을 권장한다.
+
+ 
+
+불변
+
+의존 관계 주입은 처음 애플리케이션이 실행될 때 대부분 정해지고 종료 전까지 변경되지 않아야 한다.
+
+만약, 변경 가능성이 있다면 실수로 변경할 수도 있으며, 애초에 변경하면 안 되는 메서드가 변경할 수 있게 설계하는 것은 좋은 방법이 아니다.
+
+ 
+
+따라서 수정자 주입(setter 주입)의 경우 메서드를 public으로 열어두어 변경이 가능하기 때문에 적합하지 않다.
+
+생성자 주입은 객체를 생성할 때 최초로 1번만 호출되고, 그 이후에는 다시 호출되는 일이 없기 때문에 불변하게 설계할 수 있다.
+
+ 
+
+누락
+
+호출했을 때 NPE(NullPointException)가 발생한다면, 의존 관계 주입이 누락되었기 때문이다.
+
+생성자 주입을 사용하면 주입 데이터 누락 시 컴파일 오류가 발생한다.
+
+따라서 누락이 발생하더라도 실행되는 일이 없어진다.
+
+ 
+
+final 키워드 사용 가능
+
+생성자 주입을 사용하면 필드에 final 키워드를 사용할 수 있다.
+
+따라서 생성자에서 값이 설정되지 않으면 컴파일 시점에서 오류를 확인할 수 있게 된다.
+
+java: variable (데이터 이름) might not have been initialized
+생성자 주입을 제외한 나머지 주입 방식은 생성자 이후에 호출되는 형태로 final 키워드를 사용할 수 없다.
+
+ 
+
+순환 참조
+
+생성자 주입은 순환 참조를 방지할 수 있다.
+
+개발을 하다 보면 여러 컴포넌트 간에 의존성이 생기게 된다.
+
+필드 주입과 수정자 주입(setter 주입)은 빈이 생성된 후에 참조를 하기 때문에 애플리케이션이 어떤 오류와 경고 없이 구동된다. 따라서 실제 코드가 호출될 때까지 문제를 알 수 없다.
+
+하지만, 생성자를 통해 의존관계를 주입하게 되면 BeanCurrentlyInCreationException이 발생하게 되어 문제를 알 수 있다.
+
+
+
+
