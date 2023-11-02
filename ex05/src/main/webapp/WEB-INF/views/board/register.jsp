@@ -139,6 +139,24 @@
 			e.preventDefault();
 			
 			console.log("submit clicked");
+			
+			var str= "";
+			
+			$(".uploadResult ul li").each(function (i, obj) {
+				
+				var jobj = $(obj);
+				
+				
+				
+				
+				str +="<input type='hodden' name='attachList["+i+"].fileName'value='"+jobj.data("filename")+"'>";
+				str +="<input type='hodden' name='attachList["+i+"].uuid'value='"+jobj.data("uuid")+"'>";
+				str +="<input type='hodden' name='attachList["+i+"].uploadPath'value='"+jobj.data("path")+"'>";
+				str +="<input type='hodden' name='attachList["+i+"].fileType'value='"+jobj.data("type")+"'>";
+				console.dir("ddddadsfasdf========  " + jobj);
+				
+				formObj.append(str).submit();
+			});
 		});
 	});
 	
@@ -208,14 +226,19 @@
 			
 			// image type
 			if (obj.image) {
-				var fileCallPath = encodeURIComponent(obj.uploadPath +"/"+ obj.uuid+"_"+obj.fileName);
+				var fileCallPath = encodeURIComponent(obj.uploadPath +"/s_"+ obj.uuid+"_"+obj.fileName);
 				
-				str += "<li><div>";
+				str += "<li data-path='"+ obj.uploadPath+"'";
+				str += "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"'data-type='"+obj.image+"'";
+				str +" ><div>";
 				str += "<span> " + obj.fileName + "</span>";
-				str += "<button type= 'button' data-file=\'"+fileCallPath+"\' data-type='image' class = 'btn btn-warning btn-circle'><i class= 'fa fa-times'></i></button><br>";
+				str += "<button type= 'button' data-file=\'"+fileCallPath+"\' "
+				str += "data-type='image' class = 'btn btn-warning btn-circle'><i class= 'fa fa-times'></i></button><br>";
 				str += "<img src='/display?fileName="+fileCallPath+"'>";
 				str += "</div>";
 				str += "</li>";
+				
+				console.log("str 확인 ===  " + str);
 			
 			}else {
 				var fileCallPath = encodeURIComponent(obj.uploadPath +"/"+ obj.uuid+"_"+obj.fileName);
@@ -223,7 +246,8 @@
 				// repacle로 경로 \\ 를 /로 변경
 				var fileLink = fileCallPath.replace(new RegExp(/\\/g), "/");
 				
-				str += "<li><div>";
+				str += "<li ";
+				str += "data-path='"+obj.uploadPath+"' data-uuid='"+obj.uuid+"' data-filename = '"+obj.fileName+"' data-type='"+obj.image+"'><div>";
 				str += "<span> " + obj.fileName + "</span>";
 				str += "<button type= 'button' data-file=\'"+fileCallPath+"\' data-type='file' class = 'btn btn-warning btn-circle'><i class= 'fa fa-times'></i></button><br>";
 				str += "<a><img src='/resources/img/attach1.png'></a>";
