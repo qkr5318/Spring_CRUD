@@ -125,7 +125,7 @@
 			// Chrome에서는 정상 작동하지만 IE에서는 제대로 동작이 안될수 있어 변경이 필요하다.
 			$(".bigPictureWrapper").on("click", function(e) {
 				$(".bigPicture").animate({width:'0%', height:'0%'}, 1000);
-				setTimeout(() => {
+				setTimeout(function () {
 				//	$(this).hide();
 					$(".bigPictureWrapper").hide();
 				}, 1000);

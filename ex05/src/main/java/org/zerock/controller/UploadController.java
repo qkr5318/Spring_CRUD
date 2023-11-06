@@ -162,6 +162,7 @@ public class UploadController {
 			
 		}// end for
 		
+		log.info("list ===  "  + list);
 		return new ResponseEntity<List<AttachFileDTO>>(list, HttpStatus.OK);
 	}
 	

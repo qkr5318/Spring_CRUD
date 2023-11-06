@@ -14,6 +14,26 @@
 		<org.slf4j-version>1.7.25</org.slf4j-version>
 	</properties>
 	<dependencies>
+	
+		<!-- part6 추가 -->
+		<!-- quartz 주기적으로 읽고 쓰는 작업을 해주는 스케쥴러 라이브러리
+		Quartz에 대한 설정은 XML과 어노테이션을 활용할 수 있다.
+		어노테이션을 이용하기 위해서 root-context.xml의 일부를 수정한다. -->
+		<!-- https://mvnrepository.com/artifact/org.quartz-scheduler/quartz -->
+		<dependency>
+		    <groupId>org.quartz-scheduler</groupId>
+		    <artifactId>quartz</artifactId>
+		    <version>2.3.0</version>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/org.quartz-scheduler/quartz-jobs -->
+		<dependency>
+		    <groupId>org.quartz-scheduler</groupId>
+		    <artifactId>quartz-jobs</artifactId>
+		    <version>2.3.0</version>
+		</dependency>
+		
+		
 		<!-- part5 추가 -->
 		
 		<!-- https://mvnrepository.com/artifact/net.coobird/thumbnailator -->

@@ -32,4 +32,7 @@ public interface ReplyMapper {
 	// 댓글들을 페이징 처리하기 위해서는 해당 게시물의 전체 댓글의 숫자를 파악해서 화면에 보여줄 필요가 있다.
 	// ReplyMapper 인터페이스에 getCountByBno()를 추가
 	public int getCountByBno(Long bno);
+	
+	// 모든 댓글 삭제 처리
+	public int deleteAll(Long bno);
 }

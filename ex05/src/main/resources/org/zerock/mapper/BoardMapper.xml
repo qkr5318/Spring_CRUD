@@ -36,6 +36,7 @@ FROM
 						title like '%'||#{keyword}||'%'
 						</when>
 						<when test="type == 'C'.toString()">
+						
 						content like '%'||#{keyword}||'%'
 						</when>
 						<when test="type == 'W'.toString()">

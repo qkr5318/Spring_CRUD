@@ -145,18 +145,18 @@
 			$(".uploadResult ul li").each(function (i, obj) {
 				
 				var jobj = $(obj);
-				
-				
-				
-				
-				str +="<input type='hodden' name='attachList["+i+"].fileName'value='"+jobj.data("filename")+"'>";
-				str +="<input type='hodden' name='attachList["+i+"].uuid'value='"+jobj.data("uuid")+"'>";
-				str +="<input type='hodden' name='attachList["+i+"].uploadPath'value='"+jobj.data("path")+"'>";
-				str +="<input type='hodden' name='attachList["+i+"].fileType'value='"+jobj.data("type")+"'>";
 				console.dir("ddddadsfasdf========  " + jobj);
 				
-				formObj.append(str).submit();
+				
+				str +="<input type='hidden' name='attachList["+i+"].fileName'value='"+jobj.data("filename")+"'>";
+				str +="<input type='hidden' name='attachList["+i+"].uuid'value='"+jobj.data("uuid")+"'>";
+				str +="<input type='hidden' name='attachList["+i+"].uploadPath'value='"+jobj.data("path")+"'>";
+				str +="<input type='hidden' name='attachList["+i+"].fileType'value='"+jobj.data("type")+"'>";
+				
+				console.log("확인 == " + str);
+			
 			});
+			formObj.append(str).submit();
 		});
 	});
 	
@@ -205,7 +205,8 @@
 			dataType:'json',
 				success: function(result){
 					console.log(result);
-					 showUploadResult(result); // 업로드 결과 처리 함수
+				
+					showUploadResult(result); // 업로드 결과 처리 함수
 				}
 			
 			

@@ -1,11 +1,19 @@
 package org.zerock.domain;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+
 import org.springframework.web.util.UriComponentsBuilder;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.extern.log4j.Log4j;
 
+@Log4j
 @Getter
 @Setter
 @ToString
@@ -47,4 +55,7 @@ public class Criteria {
 		
 		return builder.toUriString();
 	}
+	
+	
+	
 }
